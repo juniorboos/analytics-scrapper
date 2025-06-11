@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Export CSV",
+  "version": "1.0",
+  "description": "Clicks all 'More' buttons and selects 'Export as CSV'.",
+  "permissions": ["scripting", "activeTab", "downloads", "identity"],
+  "action": {
+    "default_title": "Run Auto Export",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "128": "icons/icon128.png"
+  }
+}
