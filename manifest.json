@@ -3,15 +3,29 @@
   "name": "Auto Export CSV",
   "version": "1.0",
   "description": "Clicks all 'More' buttons and selects 'Export as CSV'.",
-  "permissions": ["scripting", "activeTab", "downloads", "identity"],
   "action": {
     "default_title": "Run Auto Export",
     "default_popup": "popup.html"
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "icons": {
     "128": "icons/icon128.png"
+  },
+  "permissions": [
+    "activeTab",
+    "downloads",
+    "identity",
+    "scripting",
+    "storage",
+    "fileSystem",
+    "fileSystem.write",
+    "fileSystem.directory"
+  ],
+  "oauth2": {
+    "client_id": "546914122983-b3cgho338bvhq8v4a676jg6p7aj5vm7q.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/spreadsheets"]
   }
 }

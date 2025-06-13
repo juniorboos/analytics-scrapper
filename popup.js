@@ -1,48 +1,60 @@
 console.log("Popup script loaded");
-async function handleCSVUpload() {
+const uploadButton = document.getElementById("upload");
+
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsText(file);
+  });
+}
+
+async function handleFiles() {
   try {
-    const folderHandle = await window.showDirectoryPicker();
-    for await (const [name, handle] of folderHandle.entries()) {
-      if (name.endsWith(".csv")) {
-        const file = await handle.getFile();
-        const text = await file.text();
+    const fileList = this.files;
+    reader = new FileReader();
+    const parsedList = [];
+    const statusEl = document.getElementById("status");
+    const uploadingEl = document.createElement("p");
+    uploadingEl.id = "uploadingStatus";
+    uploadingEl.textContent = `Uploading ${fileList.length} file(s)...`;
+    statusEl.appendChild(uploadingEl);
+    for (i = 0; i < fileList.length; i++) {
+      file = fileList[i];
+      text = await readFileAsText(file);
 
-        const rows = text
-          .trim()
-          .split("\n")
-          .map((line) => line.split(","));
+      const rows = text
+        .trim()
+        .split("\n")
+        .map((line) => line.split(","));
+      parsedList.push({ name: file.name, rows });
+    }
 
-        const sheetName = name.match(/^Top (.*?) -/)?.[1] || "Data";
-
-        chrome.identity.getAuthToken({ interactive: true }, async (token) => {
-          await fetch(
-            "https://script.google.com/macros/s/AKfycbyQx0-ZJEKHKTJ4eSHiNmdAz5z-Yc8sURZjuwgpXybLvnvjaRTXPuwnE9YRS89LkO4s/exec",
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ csv: rows, sheetName }),
-            }
-          );
-        });
+    // Send message to background.js for auth and upload
+    chrome.runtime.sendMessage(
+      {
+        type: "PUSH_TO_SHEETS",
+        payload: {
+          tables: parsedList,
+        },
+      },
+      (response) => {
+        if (response?.success) {
+          uploadingEl.textContent = "✅ Data pushed successfully!";
+          console.log("✅ Data pushed successfully:", response.response);
+        } else {
+          console.error("❌ Failed to push data:", response?.error);
+        }
       }
-    }
-
-    alert("✅ All CSVs uploaded to Google Sheets!");
+    );
+    uploadButton.value = "";
   } catch (error) {
-    if (error.name === "AbortError") {
-      console.log("Usuário cancelou a seleção da pasta.");
-      // Opcional: mostrar mensagem ao usuário, ou simplesmente ignorar
-    } else {
-      console.error("Erro inesperado:", error);
-      alert("Ocorreu um erro ao tentar carregar os arquivos.");
-    }
+    document.getElementById("status").innerText = "Error:" + error.message;
   }
 }
 
-document.getElementById("upload").addEventListener("click", handleCSVUpload);
+uploadButton.addEventListener("change", handleFiles, false);
 
 document.getElementById("runExport").addEventListener("click", async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -64,8 +76,14 @@ document.getElementById("runExport").addEventListener("click", async () => {
   }
 });
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.status === "done") {
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.status === "export-done") {
     document.getElementById("status").innerText = "✅ Export complete!";
+  }
+});
+
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.status === "upload-done") {
+    document.getElementById("status").innerText = "✅ Upload complete!";
   }
 });

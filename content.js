@@ -49,4 +49,4 @@ console.log("🚀 content.js loaded");
 })();
 
 // At the end of content.js
-chrome.runtime?.sendMessage?.({ status: "done" });
+chrome.runtime?.sendMessage?.({ status: "export-done" });
