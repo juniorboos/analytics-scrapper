@@ -1,6 +1,6 @@
 # 📊 Analytics scrapper
 
-This Chrome Extension lets you upload one or more CSV files and automatically appends their data into a Google Sheet. Each CSV is treated as a separate table, inserted horizontally with custom formatting. Perfect if you're poor like me and want to keep your analytics after 30 days.
+This Chrome Extension lets you upload one or more CSV files and automatically appends their data into a Google Sheet. Each CSV is treated as a separate table, inserted horizontally with custom formatting. Perfect if you're poor like me and want to keep your analytics data after 30 days.
 
 ---
 
@@ -38,8 +38,8 @@ extension/
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Create a project (or select an existing one)
 3. Enable the **Google Sheets API**
-4. Create OAuth 2.0 credentials
-5. Set the redirect URI to: https://<your-extension-id>.chromiumapp.org/ (you can find the extension id at `chrome://extensions/`)
+4. Create OAuth 2.0 credentials and add it to `manifest.json` (clone `manifest_example.json`)
+6. Set the redirect URI to: https://<your-extension-id>.chromiumapp.org/ (you can find the extension id at `chrome://extensions/`)
 
 > ⚠️ Be sure to whitelist your extension ID.
 
@@ -47,7 +47,7 @@ extension/
 
 ### 2. Set your configuration
 
-In `config.js`:
+In `config.js` (clone from `config_example.json`):
 
 ```js
 export default {
