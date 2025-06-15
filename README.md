@@ -2,6 +2,7 @@
 
 This Chrome Extension lets you upload one or more CSV files and automatically appends their data into a Google Sheet. Each CSV is treated as a separate table, inserted horizontally with custom formatting. Perfect if you're poor like me and want to keep your analytics data after 30 days.
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/P5P41FZQVI)
 ---
 
 ## 🚀 Features
