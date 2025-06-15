@@ -40,7 +40,7 @@ extension/
 2. Create a project (or select an existing one)
 3. Enable the **Google Sheets API**
 4. Create OAuth 2.0 credentials and add it to `manifest.json` (clone `manifest_example.json`)
-6. Set the redirect URI to: https://<your-extension-id>.chromiumapp.org/ (you can find the extension id at `chrome://extensions/`)
+6. Set the redirect URI to: `https://<your-extension-id>.chromiumapp.org/` (you can find the extension id at `chrome://extensions/`)
 
 > ⚠️ Be sure to whitelist your extension ID.
 
