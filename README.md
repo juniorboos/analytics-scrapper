@@ -21,6 +21,7 @@ This Chrome Extension lets you upload one or more CSV files and automatically ap
 ```
 extension/
 ├── background.js # Main logic and Sheets API integration
+├── content.js # Export CSV logic.
 ├── config.js # Stores constants (e.g., Spreadsheet ID)
 ├── popup.html # Extension UI with Tailwind styling
 ├── popup.js # File parsing, UI event handling
